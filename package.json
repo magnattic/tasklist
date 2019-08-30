@@ -15,8 +15,7 @@
   },
   "devDependencies": {
     "prettier": "^1.18.2",
-    "cypress": "^3.4.1",
-    "eslint": "^5.0.0"
+    "cypress": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

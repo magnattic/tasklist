@@ -5,9 +5,11 @@ import React, {
   useState
 } from "react";
 
-export const TodoList: FunctionComponent = () => {
+export const TodoList: FunctionComponent<{
+  tasks: string[];
+  onTaskAdded: (title: string) => void;
+}> = props => {
   const [state, setState] = useState({
-    tasks: [] as string[],
     count: 0,
     newTaskInput: ""
   });
@@ -21,19 +23,19 @@ export const TodoList: FunctionComponent = () => {
 
   const addTask = (event: FormEvent) => {
     event.preventDefault();
+    props.onTaskAdded(state.newTaskInput);
     setState(state => ({
       ...state,
-      tasks: [...state.tasks, state.newTaskInput],
       newTaskInput: ""
     }));
   };
 
   return (
     <div>
-      <h2>TodoList ({state.tasks.length})</h2>
+      <h2>TodoList ({props.tasks.length})</h2>
       <ul>
-        {state.tasks.map(task => (
-          <Task title={task} />
+        {props.tasks.map(task => (
+          <Task key={task} title={task} />
         ))}
       </ul>
       <form onSubmit={addTask}>
