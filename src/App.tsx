@@ -1,40 +1,29 @@
-import { firestore } from "firebase";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import { A, useRoutes } from "hookrouter";
+import React, { FunctionComponent } from "react";
 import "./App.css";
-import { db } from "./firebase";
-import logo from "./logo.svg";
-import { TodoList } from "./TodoList/TodoList";
+import { Imprint } from "./Imprint/Imprint";
+import { Taskpage } from "./TodoList/TaskPage";
 
-const getTodos = (
-  db: firestore.Firestore,
-  callback: (tasks: string[]) => void
-) => {
-  return db
-    .collection("tasks")
-    .onSnapshot(tasks => callback(tasks.docs.map(doc => doc.get("title"))));
-};
-
-const addTask = (task: string) => {
-  db.collection("tasks").add({ title: task });
+export const routes = {
+  "/": () => <Taskpage />,
+  "/about": () => <Imprint />
 };
 
 const App: FunctionComponent = () => {
-  const [state, setState] = useState({
-    tasks: [] as string[]
-  });
-  useEffect(() => {
-    getTodos(db, todos => setState({ tasks: todos }));
-  }, []);
+  const routeResult = useRoutes(routes);
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-          {new Date().toISOString()}
-        </p>
-        <TodoList tasks={state.tasks} onTaskAdded={addTask} />
+        {routeResult}
+        <ul>
+          <li>
+            <A href="/">Tasks</A>
+          </li>
+          <li>
+            <A href="/about">Imprint</A>
+          </li>
+        </ul>
       </header>
     </div>
   );

@@ -4,10 +4,12 @@ import React, {
   FunctionComponent,
   useState
 } from "react";
+import { Task } from "./task";
 
 export const TodoList: FunctionComponent<{
-  tasks: string[];
+  tasks: Task[];
   onTaskAdded: (title: string) => void;
+  onTaskRemove: (title: string) => void;
 }> = props => {
   const [state, setState] = useState({
     count: 0,
@@ -32,24 +34,42 @@ export const TodoList: FunctionComponent<{
 
   return (
     <div>
-      <h2>TodoList ({props.tasks.length})</h2>
       <ul>
+        <li>
+          <form onSubmit={addTask}>
+            <input
+              type="text"
+              value={state.newTaskInput}
+              onChange={changeInputText}
+            ></input>
+            <button type="submit">add</button>
+          </form>
+        </li>
         {props.tasks.map(task => (
-          <Task key={task} title={task} />
+          <TaskRow
+            key={task.id}
+            title={task.title}
+            onTaskRemove={props.onTaskRemove}
+          />
         ))}
       </ul>
-      <form onSubmit={addTask}>
-        <input
-          type="text"
-          value={state.newTaskInput}
-          onChange={changeInputText}
-        ></input>
-        <button type="submit">add</button>
-      </form>
     </div>
   );
 };
 
-export const Task: FunctionComponent<{ title: string }> = props => (
-  <li>{props.title}</li>
-);
+export const TaskRow: FunctionComponent<{
+  title: string;
+  onTaskRemove: (title: string) => void;
+}> = props => {
+  const handleRemoveClick = (e: any) => {
+    props.onTaskRemove(props.title);
+    e.preventDefault();
+  };
+
+  return (
+    <li>
+      {props.title}{" "}
+      <input type="button" onClick={handleRemoveClick} value="x" />
+    </li>
+  );
+};
