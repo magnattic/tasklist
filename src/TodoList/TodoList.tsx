@@ -5,12 +5,13 @@ import React, {
   useState
 } from "react";
 import { Task } from "./task";
+import "./TodoList.css";
 
 export const TodoList: FunctionComponent<{
   tasks: Task[];
   onTaskAdded: (title: string) => void;
   onTaskRemove: (title: string) => void;
-}> = props => {
+}> = React.memo(props => {
   const [state, setState] = useState({
     count: 0,
     newTaskInput: ""
@@ -34,7 +35,7 @@ export const TodoList: FunctionComponent<{
 
   return (
     <div>
-      <ul>
+      <ul className="tasks">
         <li>
           <form onSubmit={addTask}>
             <input
@@ -55,9 +56,9 @@ export const TodoList: FunctionComponent<{
       </ul>
     </div>
   );
-};
+});
 
-export const TaskRow: FunctionComponent<{
+const TaskRow: FunctionComponent<{
   title: string;
   onTaskRemove: (title: string) => void;
 }> = props => {
