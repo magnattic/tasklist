@@ -1,24 +1,30 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent } from "react";
+import { connect } from "react-redux";
 import { db } from "../firebase";
+import { TaskActions } from "../store/api.actions";
+import { store, TaskState } from "../store/reducer";
 import { Task } from "./task";
 import { taskManager } from "./task-store";
 import { TodoList } from "./TodoList";
 
 const { getTodos, addTask, removeTask } = taskManager(db);
 
-export const Taskpage: FunctionComponent = React.memo(() => {
-  const [state, setState] = useState({ tasks: [] as Task[] });
+getTodos(tasks => store.dispatch(TaskActions.tasksChanged({ tasks })));
 
-  useEffect(() => getTodos(tasks => setState({ tasks })), [getTodos]);
-
+const comp: FunctionComponent<{ tasks: Task[] }> = React.memo(props => {
+  console.log(props);
   return (
     <div>
-      <h2>TodoList ({state.tasks.length})</h2>
+      <h2>TodoList ({props.tasks.length})</h2>
       <TodoList
-        tasks={state.tasks}
+        tasks={props.tasks}
         onTaskAdded={addTask}
         onTaskRemove={removeTask}
       />
     </div>
   );
 });
+
+const mapStateToProps = (state: TaskState) => ({ tasks: state.tasks });
+
+export const Taskpage = connect(mapStateToProps)(comp);

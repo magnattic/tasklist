@@ -6,17 +6,15 @@ export const taskManager = (db: firestore.Firestore) => {
 
   return {
     getTodos: (callback: (tasks: Task[]) => void) => {
-      return db
-        .collection("tasks")
-        .onSnapshot(tasks =>
-          callback(
-            tasks.docs.map(doc => ({ id: doc.id, title: doc.get("title") }))
-          )
-        );
+      return collection.onSnapshot(tasks =>
+        callback(
+          tasks.docs.map(doc => ({ id: doc.id, title: doc.get("title") }))
+        )
+      );
     },
 
     addTask: (title: string) => {
-      db.collection("tasks").add({ title });
+      collection.add({ title });
     },
 
     removeTask: (title: string) => {

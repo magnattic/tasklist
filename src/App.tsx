@@ -2,11 +2,13 @@ import { A, useRoutes } from "hookrouter";
 import React, { FunctionComponent } from "react";
 import "./App.css";
 import { Imprint } from "./Imprint/Imprint";
+import { ShowBuddy } from "./show-buddy/ShowBuddy";
 import { Taskpage } from "./TodoList/TaskPage";
 
 export const routes = {
   "/": () => <Taskpage />,
-  "/about": () => <Imprint />
+  "/about": () => <Imprint />,
+  "/shows": () => <ShowBuddy />
 };
 
 const App: FunctionComponent = () => {
@@ -22,6 +24,9 @@ const App: FunctionComponent = () => {
           </li>
           <li>
             <A href="/about">Imprint</A>
+          </li>
+          <li>
+            <A href="/shows">Shows</A>
           </li>
         </ul>
       </header>
