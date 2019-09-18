@@ -2,13 +2,14 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./App";
+import { loadBlogEntry } from "./contentful/content-api";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./store/reducer";
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <App loadBlogEntry={loadBlogEntry} />
   </Provider>,
   document.getElementById("root")
 );

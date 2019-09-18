@@ -12,7 +12,6 @@ const { getTodos, addTask, removeTask } = taskManager(db);
 getTodos(tasks => store.dispatch(TaskActions.tasksChanged({ tasks })));
 
 const comp: FunctionComponent<{ tasks: Task[] }> = React.memo(props => {
-  console.log(props);
   return (
     <div>
       <h2>TodoList ({props.tasks.length})</h2>

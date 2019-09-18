@@ -1,24 +1,19 @@
-import React, { ChangeEventHandler, useState } from "react";
-import { fromFetch } from "rxjs/fetch";
-import { Subject } from "rxjs/internal/Subject";
-import { debounceTime, map, switchMap } from "rxjs/operators";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
+import { ReplaySubject } from "rxjs";
+import { loadSeasons } from "./show-api";
 
-const valueChanged$ = new Subject<string>();
-valueChanged$
-  .pipe(
-    debounceTime(1000),
-    switchMap(search =>
-      fromFetch(
-        `https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&query=${search}&pag=1`
-      )
-    ),
-    switchMap(res => res.json()),
-    map(json => json.results[0])
-  )
-  .subscribe(console.log);
+const valueChanged$ = new ReplaySubject<string>(1);
 
-export const ShowBuddy: React.FC = () => {
+export const ShowBuddy: React.FC = React.memo(() => {
   const [state, setState] = useState({ search: "" });
+
+  useEffect(() => {
+    console.log("effect");
+    const subscription = valueChanged$
+      .pipe(loadSeasons())
+      .subscribe(console.log);
+    return () => subscription.unsubscribe();
+  }, []);
 
   const searchValueChanged: ChangeEventHandler<HTMLInputElement> = e => {
     valueChanged$.next(e.target.value);
@@ -35,4 +30,4 @@ export const ShowBuddy: React.FC = () => {
       ></input>
     </div>
   );
-};
+});

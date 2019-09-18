@@ -1,18 +1,18 @@
 import { A, useRoutes } from "hookrouter";
-import React, { FunctionComponent } from "react";
+import React from "react";
 import "./App.css";
-import { loadBlogEntry } from "./contentful/content-api";
+import { BlogEntry, loadBlogEntry } from "./contentful/content-api";
 import { Imprint } from "./Imprint/Imprint";
 import { ShowBuddy } from "./show-buddy/ShowBuddy";
 import { Taskpage } from "./TodoList/TaskPage";
 
-export const routes = {
-  "/": () => <Taskpage />,
-  "/about": () => <Imprint loadBlogEntry={loadBlogEntry} />,
-  "/shows": () => <ShowBuddy />
-};
+const App: React.FC<{ loadBlogEntry: () => Promise<BlogEntry> }> = props => {
+  const routes = {
+    "/": () => <Taskpage />,
+    "/about": () => <Imprint loadBlogEntry={loadBlogEntry} />,
+    "/shows": () => <ShowBuddy />
+  };
 
-const App: FunctionComponent = () => {
   const routeResult = useRoutes(routes);
 
   return (
@@ -35,4 +35,4 @@ const App: FunctionComponent = () => {
   );
 };
 
-export default App;
+export default React.memo(App);
