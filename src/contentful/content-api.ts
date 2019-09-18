@@ -11,5 +11,7 @@ export interface BlogEntry {
 }
 
 export const loadBlogEntry = async () => {
-  return await client.getEntry<BlogEntry>("3K9b0esdy0q0yGqgW2g6Ke");
+  return await client
+    .getEntry<BlogEntry>("3K9b0esdy0q0yGqgW2g6Ke")
+    .then(json => json.fields);
 };
