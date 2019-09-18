@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/firebase-firestore";
 
 const firebaseApp = firebase.initializeApp({
-  apiKey: process.env.FIREBASE_API_KEY,
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "funktasktic.firebaseapp.com",
   databaseURL: "https://funktasktic.firebaseio.com",
   projectId: "funktasktic",

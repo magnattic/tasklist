@@ -8,6 +8,7 @@
     "@types/node": "12.7.2",
     "@types/react": "^16.9.2",
     "@types/react-dom": "16.9.0",
+    "contentful": "7.9.1",
     "firebase": "^6.4.2",
     "hookrouter": "^1.2.3",
     "react": "^16.9.0",
@@ -16,6 +17,7 @@
     "react-scripts": "3.1.1",
     "redux": "4.0.4",
     "redux-starter-kit": "^0.7.0",
+    "rxjs": "6.5.3",
     "typescript": "3.5.3"
   },
   "devDependencies": {
