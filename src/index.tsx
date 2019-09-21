@@ -5,7 +5,6 @@ import App from "./App";
 import { loadBlogEntry } from "./contentful/content-api";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import { testPlex2 } from "./show-buddy/plex-api";
 import { store } from "./store/reducer";
 
 ReactDOM.render(
@@ -19,5 +18,3 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
-testPlex2();

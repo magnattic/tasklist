@@ -8,6 +8,7 @@ const client = createClient({
 export interface BlogEntry {
   title: string;
   description: string;
+  body: string;
 }
 
 export const loadBlogEntry = async () => {

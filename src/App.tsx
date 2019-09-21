@@ -18,18 +18,20 @@ const App: React.FC<{ loadBlogEntry: () => Promise<BlogEntry> }> = props => {
   return (
     <div className="App">
       <header className="App-header">
+        <nav>
+          <ul>
+            <li>
+              <A href="/">Tasks</A>
+            </li>
+            <li>
+              <A href="/about">Imprint</A>
+            </li>
+            <li>
+              <A href="/shows">Shows</A>
+            </li>
+          </ul>
+        </nav>
         {routeResult}
-        <ul>
-          <li>
-            <A href="/">Tasks</A>
-          </li>
-          <li>
-            <A href="/about">Imprint</A>
-          </li>
-          <li>
-            <A href="/shows">Shows</A>
-          </li>
-        </ul>
       </header>
     </div>
   );

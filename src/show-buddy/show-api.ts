@@ -1,6 +1,6 @@
-import { of, pipe } from "rxjs";
+import { forkJoin, of, pipe } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { debounceTime, map, switchMap } from "rxjs/operators";
+import { debounceTime, filter, map, switchMap } from "rxjs/operators";
 
 export interface Show {
   id: number;
@@ -12,6 +12,13 @@ export interface Season {
   season_number: number;
   name: string;
   episode_count: number;
+  episodes: Episode[];
+}
+
+export interface Episode {
+  id: number;
+  name: string;
+  air_date: string;
 }
 
 const loadShow = (search: string) =>
@@ -30,6 +37,14 @@ const fetchSeasons = (showId: number) =>
     map(json => json.seasons as Season[])
   );
 
+const fetchEpisodes = (showId: number, seasonNumber: number) =>
+  fromFetch(
+    `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+  ).pipe(
+    switchMap(res => res.json()),
+    map(json => json.episodes as Episode[])
+  );
+
 export const loadShows = () =>
   pipe(
     debounceTime<string>(1000),
@@ -42,6 +57,21 @@ export const loadSeasons = () =>
     switchMap(show =>
       show
         ? fetchSeasons(show.id).pipe(map(seasons => ({ show, seasons })))
-        : of({ show: null, seasons: [] })
+        : of({ show: null as Show | null, seasons: [] as Season[] })
+    )
+  );
+
+export const loadSeasonsWithEpisodes = () =>
+  pipe(
+    loadSeasons(),
+    filter(({ show }) => show != null),
+    switchMap(({ show, seasons }) =>
+      forkJoin(
+        seasons.map((season: Season) =>
+          fetchEpisodes(show!.id, season.season_number).pipe(
+            map(episodes => ({ ...season, episodes } as Season))
+          )
+        )
+      ).pipe(map(seasons => ({ show, seasons })))
     )
   );

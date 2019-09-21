@@ -11,6 +11,8 @@
     "contentful": "7.9.1",
     "firebase": "^6.4.2",
     "hookrouter": "^1.2.3",
+    "marked": "^0.7.0",
+    "plex-api": "5.2.5",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-redux": "7.1.0",
@@ -18,11 +20,11 @@
     "redux": "4.0.4",
     "redux-starter-kit": "^0.7.0",
     "rxjs": "6.5.3",
-    "plex-api": "5.2.5",
     "typescript": "3.5.3"
   },
   "devDependencies": {
     "@types/react-redux": "7.1.2",
+    "@types/marked": "0.6.5",
     "cypress": "^3.4.1",
     "prettier": "^1.18.2"
   },
