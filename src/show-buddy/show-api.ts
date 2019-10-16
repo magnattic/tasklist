@@ -11,6 +11,13 @@ export interface Season {
   id: number;
   season_number: number;
   name: string;
+}
+
+export interface Episode {
+  id: number;
+  episode_number: number;
+  season_number: number;
+  name: string;
   episode_count: number;
   episodes: Episode[];
 }
@@ -37,9 +44,15 @@ const fetchSeasons = (showId: number) =>
     map(json => json.seasons as Season[])
   );
 
+<<<<<<< Updated upstream
 const fetchEpisodes = (showId: number, seasonNumber: number) =>
   fromFetch(
     `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+=======
+const fetchEpisodes = (showId: number, seasonId: number) =>
+  fromFetch(
+    `https://api.themoviedb.org/3/tv/${showId}/season/${seasonId}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
+>>>>>>> Stashed changes
   ).pipe(
     switchMap(res => res.json()),
     map(json => json.episodes as Episode[])
@@ -73,5 +86,15 @@ export const loadSeasonsWithEpisodes = () =>
           )
         )
       ).pipe(map(seasons => ({ show, seasons })))
+    )
+  );
+
+  export const loadEpisodes = () =>
+  pipe(
+    loadSeasons()
+    switchMap(({ show, seasons })  =>
+      show
+        ? of({ show, seasons, seasons.map(season => ) }
+        : of({ show: null, seasons: [] })
     )
   );
