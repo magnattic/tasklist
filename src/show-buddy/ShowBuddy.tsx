@@ -55,11 +55,15 @@ export const ShowBuddy: React.FC = React.memo(() => {
           <h3>Seasons</h3>
           <ul>
             {state.seasons.map(season => (
-              <li key={season.id}>{season.name}
-              {season.episodes.map(episode => (
-                <ul>
-                  <li key={episode.id}>{episode.name}</li>
-                </ul>
+              <li key={season.id}>
+                {season.name}
+                {season.episodes.map(episode => (
+                  <ul>
+                    <li key={episode.id}>
+                      {season.season_number}:{episode.episode_number}{" "}
+                      {episode.name}
+                    </li>
+                  </ul>
                 ))}
               </li>
             ))}
