@@ -20,7 +20,10 @@ export const Imprint: React.FC<{
     <div>
       <h1>{state.title}</h1>
       <p>{state.description}</p>
-      <div dangerouslySetInnerHTML={{ __html: marked(state.body) }}></div>
+      <div
+        className="content"
+        dangerouslySetInnerHTML={{ __html: marked(state.body) }}
+      ></div>
     </div>
   );
 };

@@ -1,10 +1,11 @@
-import { A, useRoutes } from "hookrouter";
+import { useRoutes } from "hookrouter";
 import React from "react";
-import "./App.css";
+import "./App.scss";
 import { BlogEntry, loadBlogEntry } from "./contentful/content-api";
 import { Imprint } from "./Imprint/Imprint";
 import { ShowBuddy } from "./show-buddy/ShowBuddy";
 import { Taskpage } from "./TodoList/TaskPage";
+import { NavBar } from "./Navbar";
 
 const App: React.FC<{ loadBlogEntry: () => Promise<BlogEntry> }> = props => {
   const routes = {
@@ -18,21 +19,9 @@ const App: React.FC<{ loadBlogEntry: () => Promise<BlogEntry> }> = props => {
   return (
     <div className="App">
       <header className="App-header">
-        <nav>
-          <ul>
-            <li>
-              <A href="/">Tasks</A>
-            </li>
-            <li>
-              <A href="/about">Imprint</A>
-            </li>
-            <li>
-              <A href="/shows">Shows</A>
-            </li>
-          </ul>
-        </nav>
-        {routeResult}
+        <NavBar></NavBar>
       </header>
+      {routeResult}
     </div>
   );
 };

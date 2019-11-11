@@ -9,12 +9,6 @@ export interface Show {
 
 export interface Season {
   id: number;
-  season_number: number;
-  name: string;
-}
-
-export interface Episode {
-  id: number;
   episode_number: number;
   season_number: number;
   name: string;
@@ -29,12 +23,12 @@ export interface Episode {
   air_date: string;
 }
 
-const loadShow = (search: string) =>
+const fetchShows = (search: string) =>
   fromFetch(
     `https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&query=${search}&pag=1`
   ).pipe(
     switchMap(res => res.json()),
-    map(json => json.results[0] as Show)
+    map(json => json.results as Show[])
   );
 
 const fetchSeasons = (showId: number) =>
@@ -45,29 +39,30 @@ const fetchSeasons = (showId: number) =>
     map(json => json.seasons as Season[])
   );
 
-<<<<<<< Updated upstream
 const fetchEpisodes = (showId: number, seasonNumber: number) =>
   fromFetch(
     `https://api.themoviedb.org/3/tv/${showId}/season/${seasonNumber}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
-=======
-const fetchEpisodes = (showId: number, seasonId: number) =>
-  fromFetch(
-    `https://api.themoviedb.org/3/tv/${showId}/season/${seasonId}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
->>>>>>> Stashed changes
   ).pipe(
     switchMap(res => res.json()),
     map(json => json.episodes as Episode[])
   );
 
-export const loadShows = () =>
+export const loadShowSearch = () =>
   pipe(
-    debounceTime<string>(1000),
-    switchMap(search => (search ? loadShow(search) : of(null)))
+    debounceTime<string>(200),
+    switchMap(search => (search ? fetchShows(search) : of([])))
+  );
+
+export const loadShow = () =>
+  pipe(
+    switchMap((search: string) =>
+      search ? fetchShows(search).pipe(map(shows => shows[0])) : of(null)
+    )
   );
 
 export const loadSeasons = () =>
   pipe(
-    loadShows(),
+    loadShow(),
     switchMap(show =>
       show
         ? fetchSeasons(show.id).pipe(map(seasons => ({ show, seasons })))
@@ -90,12 +85,10 @@ export const loadSeasonsWithEpisodes = () =>
     )
   );
 
-  export const loadEpisodes = () =>
+export const loadEpisodes = () =>
   pipe(
-    loadSeasons()
-    switchMap(({ show, seasons })  =>
-      show
-        ? of({ show, seasons, seasons.map(season => ) }
-        : of({ show: null, seasons: [] })
+    loadSeasons(),
+    switchMap(({ show, seasons }) =>
+      show ? of({ show, seasons }) : of({ show: null, seasons: [] })
     )
   );
