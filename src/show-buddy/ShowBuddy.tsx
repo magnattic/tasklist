@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { ReplaySubject } from "rxjs";
 import { getShows } from "./plex-api";
 import { loadSeasonsWithEpisodes, Season, Show } from "./show-api";
-import { ShowSearch } from "./show-search/show-search";
+import ShowSearch from "./show-search/show-search";
 import "./ShowBuddy.scss";
 
 const valueChanged$ = new ReplaySubject<string>(1);
 
-export const ShowBuddy: React.FC = React.memo(() => {
+const ShowBuddy: React.FC = () => {
   const [state, setState] = useState({
     search: "",
     searchResults: [] as Show[] | null,
@@ -52,31 +52,8 @@ export const ShowBuddy: React.FC = React.memo(() => {
           </div>
         </div>
       </section>
-      <div>
-        {state.show && (
-          <section>
-            <h2>
-              {state.show.name} ({state.isShowInPlex ? "✓" : "x"})
-            </h2>
-            <h3>Seasons</h3>
-            <ul>
-              {state.seasons.map(season => (
-                <li key={season.id}>
-                  {season.name}
-                  {season.episodes.map(episode => (
-                    <ul>
-                      <li key={episode.id}>
-                        {season.season_number}:{episode.episode_number}{" "}
-                        {episode.name}
-                      </li>
-                    </ul>
-                  ))}
-                </li>
-              ))}
-            </ul>
-          </section>
-        )}
-      </div>
     </React.Fragment>
   );
-});
+};
+
+export default React.memo(ShowBuddy);

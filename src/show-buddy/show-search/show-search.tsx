@@ -1,18 +1,14 @@
-import React, {
-  useState,
-  ChangeEventHandler,
-  MouseEventHandler,
-  useEffect
-} from "react";
-import { Show, loadShowSearch } from "../show-api";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
 import { ReplaySubject } from "rxjs";
 import { tap } from "rxjs/operators";
+import { loadShowSearch, Show, getShowPoster } from "../show-api";
+import "./show-search.scss";
 
 const valueChanged$ = new ReplaySubject<string>(1);
 
 export const ShowSearch: React.FC<{
   onSearchChanged: (search: string) => void;
-}> = React.memo(props => {
+}> = props => {
   const [state, setState] = useState({
     search: "",
     searchResults: [] as Show[]
@@ -42,37 +38,64 @@ export const ShowSearch: React.FC<{
     valueChanged$.next(search);
   };
 
-  const searchResultSelected: MouseEventHandler<HTMLAnchorElement> = e => {
-    const search = e.currentTarget.text;
+  const searchResultSelected = (show: Show) => {
+    const search = show.name;
     props.onSearchChanged(search);
     setState(state => ({ ...state, search, searchResults: [] }));
   };
 
   return (
-    <div className="show-search is-inline-block">
-      <input
-        type="text"
-        className="input"
-        placeholder="Your favorite show"
-        value={state.search}
-        onChange={searchValueChanged}
-      ></input>
+    <React.Fragment>
+      <div className="show-search is-inline-block">
+        <input
+          type="text"
+          className="input"
+          placeholder="Your favorite show"
+          value={state.search}
+          onChange={searchValueChanged}
+        ></input>
+      </div>
       <div
         className={`show-suggestions ${
-          state.searchResults ? "show-suggestions-visible" : ""
-        } list is-hoverable`}
+          state.searchResults.length > 0 ? "show-suggestions-visible" : ""
+        }`}
       >
-        {state.searchResults &&
+        {state.searchResults.length > 0 &&
           state.searchResults.map(show => (
-            <a
-              className="list-item"
+            <div
+              className="suggestion card"
               key={show.id}
-              onClick={searchResultSelected}
+              onClick={e => searchResultSelected(show)}
             >
-              {show.name}
-            </a>
+              <div className="card-image">
+                <figure className="image is-16by9">
+                  <img src={getShowPoster(show)} alt={show.name} />
+                </figure>
+              </div>
+              <div className="card-content">
+                <div className="media">
+                  <div className="media-content">
+                    <p className="title is-4">{show.name}</p>
+                    <div className="level">
+                      <p className="level-left is-6">
+                        <time dateTime={show.first_air_date}>
+                          {new Date(show.first_air_date).getFullYear()}
+                        </time>
+                      </p>
+                      <p className="level-right">{show.vote_average}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="content">
+                  <p className="show-description">{show.overview}</p>
+                </div>
+              </div>
+            </div>
           ))}
       </div>
-    </div>
+    </React.Fragment>
   );
-});
+};
+
+export default React.memo(ShowSearch);

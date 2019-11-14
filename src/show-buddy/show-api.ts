@@ -1,8 +1,29 @@
-import { forkJoin, of, pipe } from "rxjs";
+import { forkJoin, of, pipe, Observable } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { debounceTime, filter, map, switchMap } from "rxjs/operators";
 
+export interface Config {
+  images: {
+    base_url: string;
+    secure_base_url: string;
+    poster_sizes: string[];
+  };
+}
+
 export interface Show {
+  id: number;
+  name: string;
+  poster_path: string;
+  backdrop_path: string;
+  overview: string;
+  vote_average: number;
+  popularity: number;
+  first_air_date: string;
+  genres: Genre[];
+  seasons: Season[];
+}
+
+export interface Genre {
   id: number;
   name: string;
 }
@@ -31,13 +52,13 @@ const fetchShows = (search: string) =>
     map(json => json.results as Show[])
   );
 
-const fetchSeasons = (showId: number) =>
+export const fetchShow = (showId: number) =>
   fromFetch(
     `https://api.themoviedb.org/3/tv/${showId}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
-  ).pipe(
-    switchMap(res => res.json()),
-    map(json => json.seasons as Season[])
-  );
+  ).pipe(switchMap(res => res.json() as Promise<Show>));
+
+const fetchSeasons = (showId: number) =>
+  fetchShow(showId).pipe(map(json => json.seasons as Season[]));
 
 const fetchEpisodes = (showId: number, seasonNumber: number) =>
   fromFetch(
@@ -47,17 +68,20 @@ const fetchEpisodes = (showId: number, seasonNumber: number) =>
     map(json => json.episodes as Episode[])
   );
 
+export const loadShowByName = (search: string) =>
+  fetchShows(search).pipe(map(shows => shows[0]));
+
 export const loadShowSearch = () =>
   pipe(
     debounceTime<string>(200),
-    switchMap(search => (search ? fetchShows(search) : of([])))
+    switchMap(search =>
+      search ? fetchShows(search).pipe(map(shows => shows.slice(0, 5))) : of([])
+    )
   );
 
 export const loadShow = () =>
   pipe(
-    switchMap((search: string) =>
-      search ? fetchShows(search).pipe(map(shows => shows[0])) : of(null)
-    )
+    switchMap((search: string) => (search ? loadShowByName(search) : of(null)))
   );
 
 export const loadSeasons = () =>
@@ -92,3 +116,6 @@ export const loadEpisodes = () =>
       show ? of({ show, seasons }) : of({ show: null, seasons: [] })
     )
   );
+
+export const getShowPoster = (show: Show) =>
+  `http://image.tmdb.org/t/p/w500${show.backdrop_path}`;
