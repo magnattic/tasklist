@@ -1,4 +1,4 @@
-import { Observable } from "rxjs";
+import { Observable, UnaryFunction } from "rxjs";
 
 export interface Show {
   id: number;
@@ -36,5 +36,6 @@ export interface Episode {
 
 export interface ShowApi {
   fetchShow: (showId: number) => Observable<Show>;
-  getShowPoster: (show: Show) => string;
+  getShowPoster: (show: Show, size?: number) => string;
+  loadShowSearch: UnaryFunction<Observable<string>, Observable<Show[]>>;
 }

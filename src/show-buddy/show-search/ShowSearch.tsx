@@ -1,27 +1,31 @@
-import React, { ChangeEventHandler, useEffect, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  useEffect,
+  useState,
+  useContext
+} from "react";
 import { ReplaySubject } from "rxjs";
-import { tap } from "rxjs/operators";
 import { Show } from "../show-api/ShowApi";
-import { loadShowSearch } from "../show-api/TmdbApi";
 import ShowCard from "../show-card/ShowCard";
 import "./ShowSearch.scss";
+import { ShowContext } from "../..";
+import PhantomShowCard from "../show-card/PhantomShowCard";
 
 const valueChanged$ = new ReplaySubject<string>(1);
 
 export const ShowSearch: React.FC<{
   onSearchChanged: (search: string) => void;
 }> = props => {
+  const showApi = useContext(ShowContext);
+
   const [state, setState] = useState({
     search: "",
-    searchResults: [] as Show[]
+    searchResults: [] as (Show | null)[]
   });
 
   useEffect(() => {
     const subscription = valueChanged$
-      .pipe(
-        loadShowSearch(),
-        tap(console.log)
-      )
+      .pipe(showApi.loadShowSearch)
       .subscribe(shows =>
         setState(state => ({
           ...state,
@@ -29,13 +33,14 @@ export const ShowSearch: React.FC<{
         }))
       );
     return () => subscription.unsubscribe();
-  }, []);
+  }, [showApi]);
 
   const searchValueChanged: ChangeEventHandler<HTMLInputElement> = e => {
     const search = e.target.value;
     setState(state => ({
       ...state,
-      search
+      search,
+      searchResults: [null, null, null, null, null]
     }));
     valueChanged$.next(search);
   };
@@ -43,7 +48,11 @@ export const ShowSearch: React.FC<{
   const searchResultSelected = (show: Show) => {
     const search = show.name;
     props.onSearchChanged(search);
-    setState(state => ({ ...state, search, searchResults: [] }));
+    setState(state => ({
+      ...state,
+      search,
+      searchResults: []
+    }));
   };
 
   return (
@@ -58,16 +67,22 @@ export const ShowSearch: React.FC<{
         ></input>
       </div>
       <div
-        className={`show-suggestions ${
+        className={`columns show-suggestions ${
           state.searchResults.length > 0 ? "show-suggestions-visible" : ""
         }`}
       >
         {state.searchResults.length > 0 &&
-          state.searchResults.map(show => (
-            <ShowCard
-              show={show}
-              showClicked={() => searchResultSelected(show)}
-            />
+          state.searchResults.map((show, index) => (
+            <div className="column is-one-fifth" key={`show_${index}`}>
+              {show !== null ? (
+                <ShowCard
+                  show={show}
+                  showClicked={() => searchResultSelected(show)}
+                />
+              ) : (
+                <PhantomShowCard />
+              )}
+            </div>
           ))}
       </div>
     </React.Fragment>

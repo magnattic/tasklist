@@ -38,13 +38,12 @@ const fetchEpisodes = (showId: number, seasonNumber: number) =>
 export const loadShowByName = (search: string) =>
   fetchShows(search).pipe(map(shows => shows[0]));
 
-export const loadShowSearch = () =>
-  pipe(
-    debounceTime<string>(200),
-    switchMap(search =>
-      search ? fetchShows(search).pipe(map(shows => shows.slice(0, 5))) : of([])
-    )
-  );
+const loadShowSearch = pipe(
+  debounceTime<string>(200),
+  switchMap(search =>
+    search ? fetchShows(search).pipe(map(shows => shows.slice(0, 5))) : of([])
+  )
+);
 
 export const loadShow = () =>
   pipe(
@@ -84,7 +83,11 @@ export const loadEpisodes = () =>
     )
   );
 
-export const getShowPoster = (show: Show) =>
-  `http://image.tmdb.org/t/p/w500${show.backdrop_path}`;
+export const getShowPoster = (show: Show, size = 300) =>
+  `http://image.tmdb.org/t/p/w${size}${show.backdrop_path}`;
 
-export const TmdbShowApi: ShowApi = { fetchShow, getShowPoster };
+export const TmdbShowApi: ShowApi = {
+  fetchShow,
+  getShowPoster,
+  loadShowSearch
+};

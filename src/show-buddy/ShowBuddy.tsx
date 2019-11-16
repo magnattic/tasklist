@@ -11,7 +11,7 @@ import ShowDetails from "./ShowDetails";
 const valueChanged$ = new ReplaySubject<string>(1);
 
 const ShowBuddy: React.FC = props => {
-  const [state, setState] = useState({
+  const [, setState] = useState({
     search: "",
     searchResults: [] as Show[] | null,
     show: null as Show | null,

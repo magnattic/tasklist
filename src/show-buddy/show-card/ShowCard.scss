@@ -1,3 +1,14 @@
 .show-image img {
   object-fit: cover;
 }
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 1000;
+  opacity: 0.5;
+}

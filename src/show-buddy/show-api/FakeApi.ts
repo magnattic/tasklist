@@ -1,6 +1,6 @@
 import { forkJoin, of, pipe } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { debounceTime, filter, map, switchMap } from "rxjs/operators";
+import { debounceTime, filter, map, switchMap, delay } from "rxjs/operators";
 import { Episode, Season, Show, ShowApi } from "./ShowApi";
 
 export interface Config {
@@ -11,17 +11,9 @@ export interface Config {
   };
 }
 
-const fetchShows = (search: string) =>
-  fromFetch(
-    `https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&query=${search}&pag=1`
-  ).pipe(
-    switchMap(res => res.json()),
-    map(json => json.results as Show[])
-  );
-
-const fetchShow = (showId: number) =>
-  of({
-    id: showId,
+const fakeShows: Show[] = [
+  {
+    id: 4076,
     name: "Lost",
     overview:
       "Lost ist ne super Show, echt ma!\nLeute sind auf ner Insel und kommische Sachen passieren! Die letzte Staffel ist leider mist, aber davor echt cool.\n\nHier noch mehr Text damit man sieht was bei Überlänge passiert.",
@@ -33,7 +25,36 @@ const fetchShow = (showId: number) =>
     ],
     first_air_date: "2010-10-19",
     vote_average: 9.8
-  } as Show);
+  } as Show,
+  {
+    id: 4079,
+    name: "How I Met Your Mother",
+    overview:
+      "Lost ist ne super Show, echt ma!\nLeute sind auf ner Insel und kommische Sachen passieren! Die letzte Staffel ist leider mist, aber davor echt cool.\n\nHier noch mehr Text damit man sieht was bei Überlänge passiert.",
+    genres: [
+      {
+        id: 2002,
+        name: "Comedy"
+      },
+      {
+        id: 3999,
+        name: "Drama"
+      }
+    ],
+    first_air_date: "2010-10-19",
+    vote_average: 5.8
+  } as Show
+];
+
+const fetchShows = (search: string) =>
+  fromFetch(
+    `https://api.themoviedb.org/3/search/tv?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US&query=${search}&pag=1`
+  ).pipe(
+    switchMap(res => res.json()),
+    map(json => json.results as Show[])
+  );
+
+const fetchShow = (showId: number) => of({ ...fakeShows[0], id: showId });
 
 const fetchSeasons = (showId: number) =>
   fetchShow(showId).pipe(map(json => json.seasons as Season[]));
@@ -49,13 +70,10 @@ const fetchEpisodes = (showId: number, seasonNumber: number) =>
 export const loadShowByName = (search: string) =>
   fetchShows(search).pipe(map(shows => shows[0]));
 
-export const loadShowSearch = () =>
-  pipe(
-    debounceTime<string>(200),
-    switchMap(search =>
-      search ? fetchShows(search).pipe(map(shows => shows.slice(0, 5))) : of([])
-    )
-  );
+export const loadShowSearch = pipe(
+  debounceTime<string>(200),
+  switchMap(search => (search ? of(fakeShows) : of([])))
+);
 
 export const loadShow = () =>
   pipe(
@@ -97,4 +115,8 @@ export const loadEpisodes = () =>
 
 const getShowPoster = (show: Show) => "/mayflower_klein.jpg";
 
-export const FakeShowApi: ShowApi = { fetchShow, getShowPoster };
+export const FakeShowApi: ShowApi = {
+  fetchShow,
+  getShowPoster,
+  loadShowSearch
+};
