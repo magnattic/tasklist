@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ReplaySubject } from "rxjs";
 import { getShows } from "./plex-api";
-import { loadSeasonsWithEpisodes, Season, Show } from "./show-api";
-import ShowSearch from "./show-search/show-search";
+import { Season, Show } from "./show-api/ShowApi";
+import { loadSeasonsWithEpisodes } from "./show-api/TmdbApi";
+import ShowSearch from "./show-search/ShowSearch";
 import "./ShowBuddy.scss";
+import { useRoutes, HookRouter } from "hookrouter";
+import ShowDetails from "./ShowDetails";
 
 const valueChanged$ = new ReplaySubject<string>(1);
 
-const ShowBuddy: React.FC = () => {
+const ShowBuddy: React.FC = props => {
   const [state, setState] = useState({
     search: "",
     searchResults: [] as Show[] | null,
@@ -41,18 +44,24 @@ const ShowBuddy: React.FC = () => {
     setState(state => ({ ...state, search }));
   };
 
-  return (
-    <React.Fragment>
-      <section className="show-buddy hero is-primary is-medium is-bold">
-        <div className="hero-body">
-          <div className="container">
-            <h1 className="title">ShowBuddy</h1>
+  const routes = {
+    ":id/:name": ({ id }: HookRouter.QueryParams) => (
+      <ShowDetails showId={id} />
+    ),
+    "*": () => <ShowSearch onSearchChanged={searchValueChanged}></ShowSearch>
+  };
 
-            <ShowSearch onSearchChanged={searchValueChanged}></ShowSearch>
-          </div>
+  const routeResult = useRoutes(routes);
+
+  return (
+    <section className="show-buddy hero is-primary is-medium is-bold">
+      <div className="hero-body">
+        <div className="container">
+          <h1 className="title">ShowBuddy</h1>
+          {routeResult}
         </div>
-      </section>
-    </React.Fragment>
+      </div>
+    </section>
   );
 };
 

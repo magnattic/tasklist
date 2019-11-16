@@ -2,6 +2,7 @@ import { firestore } from "firebase";
 import { Task } from "./task";
 
 export const taskManager = (db: firestore.Firestore) => {
+  db.disableNetwork();
   const collection = db.collection("tasks");
 
   return {

@@ -1,6 +1,7 @@
-import { forkJoin, of, pipe, Observable } from "rxjs";
+import { forkJoin, of, pipe } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import { debounceTime, filter, map, switchMap } from "rxjs/operators";
+import { Episode, Season, Show, ShowApi } from "./ShowApi";
 
 export interface Config {
   images: {
@@ -8,40 +9,6 @@ export interface Config {
     secure_base_url: string;
     poster_sizes: string[];
   };
-}
-
-export interface Show {
-  id: number;
-  name: string;
-  poster_path: string;
-  backdrop_path: string;
-  overview: string;
-  vote_average: number;
-  popularity: number;
-  first_air_date: string;
-  genres: Genre[];
-  seasons: Season[];
-}
-
-export interface Genre {
-  id: number;
-  name: string;
-}
-
-export interface Season {
-  id: number;
-  episode_number: number;
-  season_number: number;
-  name: string;
-  episode_count: number;
-  episodes: Episode[];
-}
-
-export interface Episode {
-  id: number;
-  episode_number: number;
-  name: string;
-  air_date: string;
 }
 
 const fetchShows = (search: string) =>
@@ -52,10 +19,21 @@ const fetchShows = (search: string) =>
     map(json => json.results as Show[])
   );
 
-export const fetchShow = (showId: number) =>
-  fromFetch(
-    `https://api.themoviedb.org/3/tv/${showId}?api_key=${process.env.REACT_APP_TMDB_API_KEY}&language=en-US`
-  ).pipe(switchMap(res => res.json() as Promise<Show>));
+const fetchShow = (showId: number) =>
+  of({
+    id: showId,
+    name: "Lost",
+    overview:
+      "Lost ist ne super Show, echt ma!\nLeute sind auf ner Insel und kommische Sachen passieren! Die letzte Staffel ist leider mist, aber davor echt cool.\n\nHier noch mehr Text damit man sieht was bei Überlänge passiert.",
+    genres: [
+      {
+        id: 1000,
+        name: "Action & Adventure"
+      }
+    ],
+    first_air_date: "2010-10-19",
+    vote_average: 9.8
+  } as Show);
 
 const fetchSeasons = (showId: number) =>
   fetchShow(showId).pipe(map(json => json.seasons as Season[]));
@@ -117,5 +95,6 @@ export const loadEpisodes = () =>
     )
   );
 
-export const getShowPoster = (show: Show) =>
-  `http://image.tmdb.org/t/p/w500${show.backdrop_path}`;
+const getShowPoster = (show: Show) => "/mayflower_klein.jpg";
+
+export const FakeShowApi: ShowApi = { fetchShow, getShowPoster };

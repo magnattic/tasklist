@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { Show, Season, fetchShow } from "./show-api";
+import React, { useContext, useEffect, useState } from "react";
+import { ShowContext } from "..";
+import { Season, Show } from "./show-api/ShowApi";
+import ShowCard from "./show-card/ShowCard";
 
 const ShowDetails: React.FC<{ showId: number }> = props => {
   const [state, setState] = useState({
@@ -9,18 +11,20 @@ const ShowDetails: React.FC<{ showId: number }> = props => {
     seasons: [] as Season[]
   });
 
+  const showApi = useContext(ShowContext);
+
   useEffect(() => {
-    const subscription = fetchShow(props.showId).subscribe(show => {
-      console.log(show);
+    const subscription = showApi.fetchShow(props.showId).subscribe(show => {
       setState(state => ({ ...state, show }));
     });
     return () => subscription.unsubscribe();
-  }, [props.showId]);
+  }, [props, showApi]);
 
   return (
     <div>
       {state.show && (
         <section>
+          <ShowCard show={state.show} showClicked={() => {}} />
           <h2>
             {state.show.name} ({state.isShowInPlex ? "✓" : "x"})
           </h2>
