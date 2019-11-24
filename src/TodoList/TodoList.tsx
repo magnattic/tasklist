@@ -35,8 +35,8 @@ export const TodoList: FunctionComponent<{
 
   return (
     <div>
-      <ul className="tasks">
-        <li>
+      <div className="tasks list">
+        <div>
           <form onSubmit={addTask}>
             <input
               type="text"
@@ -45,7 +45,7 @@ export const TodoList: FunctionComponent<{
             ></input>
             <button type="submit">add</button>
           </form>
-        </li>
+        </div>
         {props.tasks.map(task => (
           <TaskRow
             key={task.id}
@@ -53,7 +53,7 @@ export const TodoList: FunctionComponent<{
             onTaskRemove={props.onTaskRemove}
           />
         ))}
-      </ul>
+      </div>
     </div>
   );
 });
@@ -68,9 +68,13 @@ const TaskRow: FunctionComponent<{
   };
 
   return (
-    <li>
-      {props.title}{" "}
-      <input type="button" onClick={handleRemoveClick} value="x" />
-    </li>
+    <a className="list-item">
+      <div className="level">
+        <span className="level-left">{props.title}</span>
+        <span className="level-right">
+          <a className="delete" onClick={handleRemoveClick} />
+        </span>
+      </div>
+    </a>
   );
 };

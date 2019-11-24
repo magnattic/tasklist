@@ -1,6 +1,6 @@
 import { forkJoin, of, pipe } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { debounceTime, filter, map, switchMap, delay } from "rxjs/operators";
+import { debounceTime, filter, map, switchMap } from "rxjs/operators";
 import { Episode, Season, Show, ShowApi } from "./ShowApi";
 
 export interface Config {

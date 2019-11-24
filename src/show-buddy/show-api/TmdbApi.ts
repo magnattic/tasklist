@@ -1,7 +1,7 @@
 import { forkJoin, of, pipe } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
-import { debounceTime, filter, map, switchMap } from "rxjs/operators";
-import { Show, Season, Episode, ShowApi } from "./ShowApi";
+import { debounceTime, delay, filter, map, switchMap } from "rxjs/operators";
+import { Episode, Season, Show, ShowApi } from "./ShowApi";
 
 export interface Config {
   images: {
@@ -40,6 +40,7 @@ export const loadShowByName = (search: string) =>
 
 const loadShowSearch = pipe(
   debounceTime<string>(200),
+  delay(1000),
   switchMap(search =>
     search ? fetchShows(search).pipe(map(shows => shows.slice(0, 5))) : of([])
   )
