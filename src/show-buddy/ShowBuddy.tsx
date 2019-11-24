@@ -1,3 +1,4 @@
+import { HookRouter, useRoutes } from "hookrouter";
 import React, { useEffect, useState } from "react";
 import { ReplaySubject } from "rxjs";
 import { getShows } from "./plex-api";
@@ -5,7 +6,6 @@ import { Season, Show } from "./show-api/ShowApi";
 import { loadSeasonsWithEpisodes } from "./show-api/TmdbApi";
 import ShowSearch from "./show-search/ShowSearch";
 import "./ShowBuddy.scss";
-import { useRoutes, HookRouter } from "hookrouter";
 import ShowDetails from "./ShowDetails";
 
 const valueChanged$ = new ReplaySubject<string>(1);
@@ -45,13 +45,14 @@ const ShowBuddy: React.FC = props => {
   };
 
   const routes = {
-    ":id/:name": ({ id }: HookRouter.QueryParams) => (
+    "/:id/:name": ({ id }: HookRouter.QueryParams) => (
       <ShowDetails showId={id} />
     ),
-    "*": () => <ShowSearch onSearchChanged={searchValueChanged}></ShowSearch>
+    "/": () => <ShowSearch onSearchChanged={searchValueChanged}></ShowSearch>
   };
 
   const routeResult = useRoutes(routes);
+  console.log(routeResult);
 
   return (
     <section className="show-buddy hero is-primary is-medium is-bold">

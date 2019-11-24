@@ -1,15 +1,16 @@
+import { navigate } from "hookrouter";
 import React, {
   ChangeEventHandler,
+  useContext,
   useEffect,
-  useState,
-  useContext
+  useState
 } from "react";
 import { ReplaySubject } from "rxjs";
+import { ShowContext } from "../..";
 import { Show } from "../show-api/ShowApi";
+import PhantomShowCard from "../show-card/PhantomShowCard";
 import ShowCard from "../show-card/ShowCard";
 import "./ShowSearch.scss";
-import { ShowContext } from "../..";
-import PhantomShowCard from "../show-card/PhantomShowCard";
 
 const valueChanged$ = new ReplaySubject<string>(1);
 
@@ -46,6 +47,7 @@ export const ShowSearch: React.FC<{
   };
 
   const searchResultSelected = (show: Show) => {
+    navigate(`/shows/${show.id}/${show.name}`);
     const search = show.name;
     props.onSearchChanged(search);
     setState(state => ({

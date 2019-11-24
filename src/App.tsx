@@ -11,7 +11,7 @@ const App: React.FC<{ loadBlogEntry: () => Promise<BlogEntry> }> = props => {
   const routes = {
     "/": () => <Taskpage />,
     "/about": () => <Imprint loadBlogEntry={loadBlogEntry} />,
-    "/shows(/?*)": () => <ShowBuddy />
+    "/shows*": () => <ShowBuddy />
   };
 
   const routeResult = useRoutes(routes);
