@@ -1,5 +1,5 @@
+import { createReducer } from "@reduxjs/toolkit";
 import { createStore } from "redux";
-import { createReducer } from "redux-starter-kit";
 import { Task } from "../TodoList/task";
 import { TaskActions } from "./api.actions";
 

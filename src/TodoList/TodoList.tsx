@@ -4,6 +4,7 @@ import React, {
   FunctionComponent,
   useState
 } from "react";
+import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { Task } from "./task";
 import "./TodoList.css";
 
@@ -35,19 +36,20 @@ export const TodoList: FunctionComponent<{
 
   return (
     <div>
+      <div>
+        <form onSubmit={addTask}>
+          <input
+            type="text"
+            value={state.newTaskInput}
+            onChange={changeInputText}
+          ></input>
+          <button type="submit">add</button>
+        </form>
+      </div>
       <div className="tasks list">
-        <div>
-          <form onSubmit={addTask}>
-            <input
-              type="text"
-              value={state.newTaskInput}
-              onChange={changeInputText}
-            ></input>
-            <button type="submit">add</button>
-          </form>
-        </div>
-        {props.tasks.map(task => (
-          <TaskRow
+        {props.tasks.map((task, index) => (
+          <SortableTaskRow
+            index={index}
             key={task.id}
             title={task.title}
             onTaskRemove={props.onTaskRemove}
@@ -57,6 +59,8 @@ export const TodoList: FunctionComponent<{
     </div>
   );
 });
+
+export const TodoListSortable = SortableContainer(TodoList);
 
 const TaskRow: FunctionComponent<{
   title: string;
@@ -78,3 +82,4 @@ const TaskRow: FunctionComponent<{
     </a>
   );
 };
+const SortableTaskRow = SortableElement(TaskRow);
