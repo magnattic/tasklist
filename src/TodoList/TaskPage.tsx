@@ -6,6 +6,7 @@ import { store, TaskState } from "../store/reducer";
 import { Task } from "./task";
 import { taskManager } from "./task-store";
 import { TodoListSortable } from "./TodoList";
+import { Container, Row, Col } from "react-bootstrap";
 
 const { getTodos, addTask, removeTask } = taskManager(db);
 
@@ -13,14 +14,18 @@ getTodos(tasks => store.dispatch(TaskActions.tasksChanged({ tasks })));
 
 const comp: FunctionComponent<{ tasks: Task[] }> = React.memo(props => {
   return (
-    <div>
-      <h2>TodoList ({props.tasks.length})</h2>
-      <TodoListSortable
-        tasks={props.tasks}
-        onTaskAdded={addTask}
-        onTaskRemove={removeTask}
-      />
-    </div>
+    <Container>
+      <Row>
+        <Col md={{ span: 8, offset: 2 }}>
+          <h2>TodoList ({props.tasks.length})</h2>
+          <TodoListSortable
+            tasks={props.tasks}
+            onTaskAdded={addTask}
+            onTaskRemove={removeTask}
+          />
+        </Col>
+      </Row>
+    </Container>
   );
 });
 

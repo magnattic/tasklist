@@ -4,6 +4,7 @@ import React, {
   FunctionComponent,
   useState
 } from "react";
+import { ListGroup } from "react-bootstrap";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { Task } from "./task";
 import "./TodoList.css";
@@ -46,7 +47,7 @@ export const TodoList: FunctionComponent<{
           <button type="submit">add</button>
         </form>
       </div>
-      <div className="tasks list">
+      <ListGroup>
         {props.tasks.map((task, index) => (
           <SortableTaskRow
             index={index}
@@ -55,7 +56,7 @@ export const TodoList: FunctionComponent<{
             onTaskRemove={props.onTaskRemove}
           />
         ))}
-      </div>
+      </ListGroup>
     </div>
   );
 });
@@ -72,14 +73,17 @@ const TaskRow: FunctionComponent<{
   };
 
   return (
-    <a className="list-item">
-      <div className="level">
-        <span className="level-left">{props.title}</span>
-        <span className="level-right">
-          <a className="delete" onClick={handleRemoveClick} />
-        </span>
-      </div>
-    </a>
+    <ListGroup.Item variant={"primary"}>
+      {props.title}
+      <button
+        type="button"
+        className="close"
+        aria-label="Close"
+        onClick={handleRemoveClick}
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </ListGroup.Item>
   );
 };
 const SortableTaskRow = SortableElement(TaskRow);
