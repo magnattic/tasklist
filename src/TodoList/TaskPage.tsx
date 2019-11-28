@@ -22,6 +22,7 @@ const comp: FunctionComponent<{ tasks: Task[] }> = React.memo(props => {
             tasks={props.tasks}
             onTaskAdded={addTask}
             onTaskRemove={removeTask}
+            distance={1}
           />
         </Col>
       </Row>
