@@ -1,50 +1,31 @@
-import { A } from "hookrouter";
+import { A, usePath } from "hookrouter";
 import React from "react";
+import classNames from "classnames";
+import { Navbar, Nav } from "react-bootstrap";
 
 export const NavBar: React.FC<{}> = () => {
+  const menuItems = [
+    { name: "Tasks", link: "/" },
+    { name: "Shows", link: "/shows" },
+    { name: "Imprint", link: "/about" }
+  ];
+
+  const path = usePath();
+
   return (
-    <nav className="navbar" role="navigation" aria-label="main navigation">
-      <div className="navbar-brand">
-        <A className="navbar-item" href="https://bulma.io">
-          <img
-            src="https://bulma.io/images/bulma-logo.png"
-            alt="Logo"
-            width="112"
-            height="28"
-          />
-        </A>
-
-        <div
-          role="button"
-          className="navbar-burger burger"
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </div>
-      </div>
-
-      <div id="navbarBasicExample" className="navbar-menu">
-        <div className="navbar-start">
-          <A href="/" className="navbar-item">
-            Home
-          </A>
-
-          <A className="navbar-item" href="/">
-            Tasks
-          </A>
-
-          <A className="navbar-item" href="/shows">
-            Shows
-          </A>
-          <A className="navbar-item" href="/about">
-            Imprint
-          </A>
-        </div>
-      </div>
-    </nav>
+    <Navbar bg="dark" variant="dark">
+      <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+      <Nav className="mr-auto">
+        {menuItems.map(item => (
+          <Nav.Link
+            key={item.name}
+            href={item.link}
+            className={classNames(["nav-item", { active: item.link === path }])}
+          >
+            {item.name}
+          </Nav.Link>
+        ))}
+      </Nav>
+    </Navbar>
   );
 };
