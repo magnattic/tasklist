@@ -5,7 +5,7 @@ import { getShows } from "./plex-api";
 import { Season, Show } from "./show-api/ShowApi";
 import { loadSeasonsWithEpisodes } from "./show-api/TmdbApi";
 import ShowSearch from "./show-search/ShowSearch";
-import "./ShowBuddy.scss";
+import styles from "./ShowBuddy.module.scss";
 import ShowDetails from "./ShowDetails";
 
 const valueChanged$ = new ReplaySubject<string>(1);
@@ -55,7 +55,7 @@ const ShowBuddy: React.FC = props => {
   console.log(routeResult);
 
   return (
-    <section className="show-buddy hero is-primary is-medium is-bold">
+    <section className={styles.showBuddy}>
       <div className="hero-body">
         <div className="container">
           <h1 className="title">ShowBuddy</h1>

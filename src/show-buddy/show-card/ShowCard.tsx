@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Card } from "react-bootstrap";
 import { ShowContext } from "../..";
 import { Show } from "../show-api/ShowApi";
 import "./ShowCard.scss";
@@ -12,43 +13,33 @@ const ShowCard: React.FC<{
   const showApi = useContext(ShowContext);
 
   return (
-    <div
-      className={`suggestion card${
-        show === null ? " suggestion--loading" : ""
-      }`}
+    <Card
+      className={`suggestion ${show === null ? " suggestion--loading" : ""}`}
       onClick={() => props.showClicked()}
     >
       {show && (
         <React.Fragment>
-          <div className="card-image">
-            <figure className="image is-16by9 show-image">
-              <img src={showApi.getShowPoster(show)} alt={show.name} />
-            </figure>
-          </div>
-          <div className="card-content">
-            <div className="media">
-              <div className="media-content">
-                <p className="title is-4">{show.name}</p>
-                <div className="level">
-                  <p className="level-left is-6">
-                    {show.first_air_date && (
-                      <time dateTime={show.first_air_date}>
-                        {new Date(show.first_air_date).getFullYear()}
-                      </time>
-                    )}
-                  </p>
-                  <p className="level-right">{show.vote_average}</p>
-                </div>
+          <Card.Img
+            src={showApi.getShowPoster(show)}
+            variant={"top"}
+          ></Card.Img>
+          <Card.Body>
+            <Card.Title>{show.name}</Card.Title>
+            <div className="row">
+              <div className="col-6">
+                {show.first_air_date && (
+                  <time dateTime={show.first_air_date}>
+                    {new Date(show.first_air_date).getFullYear()}
+                  </time>
+                )}
               </div>
+              <p className="col-6">{show.vote_average}</p>
             </div>
-
-            <div className="content">
-              <p className="show-description">{show.overview}</p>
-            </div>
-          </div>
+            <Card.Text className="show-description">{show.overview}</Card.Text>
+          </Card.Body>
         </React.Fragment>
       )}
-    </div>
+    </Card>
   );
 };
 
