@@ -61,20 +61,19 @@ export const loadSeasons = () =>
     )
   );
 
-export const loadSeasonsWithEpisodes = () =>
-  pipe(
-    loadSeasons(),
-    filter(({ show }) => show != null),
-    switchMap(({ show, seasons }) =>
-      forkJoin(
-        seasons.map((season: Season) =>
-          fetchEpisodes(show!.id, season.season_number).pipe(
-            map(episodes => ({ ...season, episodes } as Season))
-          )
+export const loadSeasonsWithEpisodes = pipe(
+  loadSeasons(),
+  filter(({ show }) => show != null),
+  switchMap(({ show, seasons }) =>
+    forkJoin(
+      seasons.map((season: Season) =>
+        fetchEpisodes(show!.id, season.season_number).pipe(
+          map(episodes => ({ ...season, episodes } as Season))
         )
-      ).pipe(map(seasons => ({ show, seasons })))
-    )
-  );
+      )
+    ).pipe(map(seasons => ({ show, seasons })))
+  )
+);
 
 export const loadEpisodes = () =>
   pipe(
