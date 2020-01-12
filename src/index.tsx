@@ -1,26 +1,33 @@
-import React, { createContext } from "react";
+import { ApolloProvider } from '@apollo/react-hooks';
+import ApolloClient from "apollo-boost";
+import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import App from "./App";
 import { loadBlogEntry } from "./contentful/content-api";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
-import { store } from "./store/reducer";
-import { TmdbShowApi } from "./show-buddy/show-api/TmdbApi";
-import { ShowApi } from "./show-buddy/show-api/ShowApi";
 import { FakeShowApi } from "./show-buddy/show-api/FakeApi";
-
-export const ShowContext = createContext<ShowApi>(TmdbShowApi);
+import { ShowApi } from "./show-buddy/show-api/ShowApi";
+import { ShowContext } from './show-buddy/show-api/ShowContext';
+import { TmdbShowApi } from "./show-buddy/show-api/TmdbApi";
+import { store } from "./store/reducer";
 
 const showApi: ShowApi =
   process.env.REACT_APP_OFFLINE_MODE === "true" ? FakeShowApi : TmdbShowApi;
 
-ReactDOM.render(
-  <ShowContext.Provider value={showApi}>
-    <Provider store={store}>
-      <App loadBlogEntry={loadBlogEntry} />
-    </Provider>
-  </ShowContext.Provider>,
+const apollo = new ApolloClient({
+  uri: "https://48p1r2roz4.sse.codesandbox.io"
+});
+
+  ReactDOM.render(
+  <ApolloProvider client={apollo}>
+    <ShowContext.Provider value={showApi}>
+      <Provider store={store}>
+        <App loadBlogEntry={loadBlogEntry} />
+      </Provider>
+    </ShowContext.Provider>
+  </ApolloProvider>,
   document.getElementById("root")
 );
 

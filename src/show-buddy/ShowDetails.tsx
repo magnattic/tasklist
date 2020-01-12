@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { of } from "rxjs";
-import { ShowContext } from "../index";
 import { Episode, Season, Show } from "./show-api/ShowApi";
 import { loadSeasonsWithEpisodes } from "./show-api/TmdbApi";
 import ShowCard from "./show-card/ShowCard";
 import { buddy } from "./show-recommendation/buddy";
 import { navigate } from "hookrouter";
+import { ShowContext } from "./show-api/ShowContext";
 
 const ShowDetails: React.FC<{
   showId: number;

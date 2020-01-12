@@ -6,11 +6,11 @@ import React, {
   useState
 } from "react";
 import { ReplaySubject } from "rxjs";
-import { ShowContext } from "../..";
 import { Show } from "../show-api/ShowApi";
 import PhantomShowCard from "../show-card/PhantomShowCard";
 import ShowCard from "../show-card/ShowCard";
 import "./ShowSearch.scss";
+import { ShowContext } from "../show-api/ShowContext";
 
 const valueChanged$ = new ReplaySubject<string>(1);
 

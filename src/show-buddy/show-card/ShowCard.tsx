@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { Card } from "react-bootstrap";
-import { ShowContext } from "../..";
 import { Show } from "../show-api/ShowApi";
 import "./ShowCard.scss";
+import { ShowContext } from "../show-api/ShowContext";
 
 const ShowCard: React.FC<{
   show: Show | null;

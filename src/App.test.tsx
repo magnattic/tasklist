@@ -10,7 +10,7 @@ it("renders without crashing", () => {
   ReactDOM.render(
     <Provider store={store}>
       <App loadBlogEntry={loadBlogEntry} />
-    </Provider>,
+    </Provider>, 
     div
   );
   ReactDOM.unmountComponentAtNode(div);
