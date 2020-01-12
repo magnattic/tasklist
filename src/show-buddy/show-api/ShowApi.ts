@@ -38,4 +38,5 @@ export interface ShowApi {
   fetchShow: (showId: number) => Observable<Show>;
   getShowPoster: (show: Show, size?: number) => string;
   loadShowSearch: UnaryFunction<Observable<string>, Observable<Show[]>>;
+  discoverShowsByGenres: (genreIds: number[]) => Observable<Show[]>;
 }

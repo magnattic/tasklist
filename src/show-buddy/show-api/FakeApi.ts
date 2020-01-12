@@ -118,5 +118,6 @@ const getShowPoster = (show: Show) => "/mayflower_klein.jpg";
 export const FakeShowApi: ShowApi = {
   fetchShow,
   getShowPoster,
-  loadShowSearch
+  loadShowSearch,
+  discoverShowsByGenres: () => of([])
 };

@@ -1,7 +1,7 @@
 import { useRoutes } from "hookrouter";
 import React from "react";
 import "./App.scss";
-import { BlogEntry, loadBlogEntry } from "./contentful/content-api";
+import { BlogEntry } from "./contentful/content-api";
 import { Imprint } from "./Imprint/Imprint";
 import { NavBar } from "./Navbar";
 import ShowBuddy from "./show-buddy/ShowBuddy";
@@ -10,7 +10,7 @@ import { Taskpage } from "./TodoList/TaskPage";
 const App: React.FC<{ loadBlogEntry: () => Promise<BlogEntry> }> = props => {
   const routes = {
     "/": () => <Taskpage />,
-    "/about": () => <Imprint loadBlogEntry={loadBlogEntry} />,
+    "/about": () => <Imprint loadBlogEntry={props.loadBlogEntry} />,
     "/shows*": () => <ShowBuddy />
   };
 
