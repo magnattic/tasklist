@@ -1,7 +1,7 @@
-import { A, usePath } from "hookrouter";
-import React from "react";
 import classNames from "classnames";
-import { Navbar, Nav } from "react-bootstrap";
+import { usePath } from "hookrouter";
+import React from "react";
+import { Nav, Navbar } from "react-bootstrap";
 
 export const NavBar: React.FC<{}> = () => {
   const menuItems = [

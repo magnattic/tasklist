@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/react-hooks';
-import ApolloClient from "apollo-boost";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
@@ -17,7 +17,8 @@ const showApi: ShowApi =
   process.env.REACT_APP_OFFLINE_MODE === "true" ? FakeShowApi : TmdbShowApi;
 
 const apollo = new ApolloClient({
-  uri: "https://48p1r2roz4.sse.codesandbox.io"
+  uri: "https://o5x5jzoo7z.sse.codesandbox.io/",
+  cache: new InMemoryCache()
 });
 
   ReactDOM.render(

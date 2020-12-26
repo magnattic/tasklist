@@ -22,6 +22,7 @@ const comp: FunctionComponent<{ tasks: Task[] }> = React.memo(props => {
             tasks={props.tasks}
             onTaskAdded={addTask}
             onTaskRemove={removeTask}
+            onSortEnd={(sort) => console.log('sort end', sort)}
             distance={1}
           />
         </Col>

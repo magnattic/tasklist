@@ -1,6 +1,6 @@
-import React from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { gql } from "apollo-boost";
+import { gql } from "@apollo/client";
+import React from "react";
 
 export const EXCHANGE_RATES = gql`
   {

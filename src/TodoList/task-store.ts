@@ -1,7 +1,7 @@
-import { firestore } from "firebase";
+import firebase from "firebase/app";
 import { Task } from "./task";
 
-export const taskManager = (db: firestore.Firestore) => {
+export const taskManager = (db: firebase.firestore.Firestore) => {
   const collection = db.collection("tasks");
 
   return {

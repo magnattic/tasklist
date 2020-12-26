@@ -1,18 +1,18 @@
-import { forkJoin, of, pipe, from } from "rxjs";
+import { forkJoin, from, of, pipe } from "rxjs";
 import { fromFetch } from "rxjs/fetch";
 import {
-  debounceTime,
+  concatMap, debounceTime,
   delay,
   filter,
   map,
   switchMap,
-  tap,
-  mergeMap,
-  concatMap,
+
+
+
   toArray
 } from "rxjs/operators";
-import { Episode, Season, Show, ShowApi } from "./ShowApi";
 import { combinations } from "../../utils/combinations";
+import { Episode, Season, Show, ShowApi } from "./ShowApi";
 
 export interface Config {
   images: {
