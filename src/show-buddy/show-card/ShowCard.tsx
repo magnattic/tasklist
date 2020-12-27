@@ -7,7 +7,7 @@ import { ShowContext } from "../show-api/ShowContext";
 const ShowCard: React.FC<{
   show: Show | null;
   showClicked: () => void;
-}> = props => {
+}> = (props) => {
   const show = props.show;
 
   const showApi = useContext(ShowContext);
@@ -28,7 +28,10 @@ const ShowCard: React.FC<{
             <div className="row">
               <div className="col-6">
                 {show.first_air_date && (
-                  <time dateTime={show.first_air_date}>
+                  <time
+                    className="first-air-date"
+                    dateTime={show.first_air_date}
+                  >
                     {new Date(show.first_air_date).getFullYear()}
                   </time>
                 )}
