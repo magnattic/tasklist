@@ -19,7 +19,7 @@
     "firebase": "8.2.1",
     "graphql": "^15.4.0",
     "hookrouter": "1.2.3",
-    "marked": "1.2.7",
+    "marked": "4.0.10",
     "node-sass": "<5",
     "plex-api": "5.3.1",
     "react": "17.0.1",
